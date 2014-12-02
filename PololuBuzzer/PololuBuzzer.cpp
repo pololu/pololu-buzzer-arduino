@@ -1,7 +1,3 @@
-#ifndef F_CPU
-#define F_CPU 16000000UL  // Standard Arduinos run at 16 MHz
-#endif //!F_CPU
-
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include "ZumoBuzzer.h"
