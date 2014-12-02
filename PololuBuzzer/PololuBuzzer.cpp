@@ -69,7 +69,7 @@ ISR (TIMER4_OVF_vect)
     DISABLE_TIMER_INTERRUPT();
     sei();                                    // re-enable global interrupts (nextNote() is very slow)
     TCCR4B = (TCCR4B & 0xF0) | TIMER4_CLK_8;  // select IO clock
-    unsigned int top = (F_CPU/16) / 1000;     // set TOP for freq = 1 kHz: 
+    unsigned int top = (F_CPU/16) / 1000;     // set TOP for freq = 1 kHz:
     TC4H = top >> 8;                          // top 2 bits... (TC4H temporarily stores top 2 bits of 10-bit accesses)
     OCR4C = top;                              // and bottom 8 bits
     TC4H = 0;                                 // 0% duty cycle: top 2 bits...
@@ -121,7 +121,7 @@ inline void ZumoBuzzer::init()
 void ZumoBuzzer::init2()
 {
   DISABLE_TIMER_INTERRUPT();
-  
+
 #ifdef __AVR_ATmega32U4__
   TCCR4A = 0x00;  // bits 7 and 6 clear: normal port op., OC4A disconnected
                   // bits 5 and 4 clear: normal port op., OC4B disconnected
@@ -129,15 +129,15 @@ void ZumoBuzzer::init2()
                   // bit 2 clear: no force output compare for channel B
                   // bit 1 clear: disable PWM for channel A
                   // bit 0 clear: disable PWM for channel B
-  
+
   TCCR4B = 0x04;  // bit 7 clear: disable PWM inversion
                   // bit 6 clear: no prescaler reset
                   // bits 5 and 4 clear: dead time prescaler 1
                   // bit 3 clear, 2 set, 1-0 clear: timer clock = CK/8
-  
+
   TCCR4C = 0x09;  // bits 7 and 6 clear: normal port op., OC4A disconnected
                   // bits 5 and 4 clear: normal port op., OC4B disconnected
-                  // bit 3 set, 2 clear: clear OC4D on comp match when upcounting, 
+                  // bit 3 set, 2 clear: clear OC4D on comp match when upcounting,
                   //                     set OC4D on comp match when downcounting
                   // bit 1 clear: no force output compare for channel D
                   // bit 0 set: enable PWM for channel 4
@@ -156,19 +156,19 @@ void ZumoBuzzer::init2()
   //    where TOP = OCR4C, OCR4D is updated at BOTTOM, TOV1 Flag is set on BOTTOM.
   //    OC4D is cleared on compare match when upcounting, set on compare
   //    match when downcounting; OC4A and OC4B are disconnected.
-  
-  unsigned int top = (F_CPU/16) / 1000; // set TOP for freq = 1 kHz: 
+
+  unsigned int top = (F_CPU/16) / 1000; // set TOP for freq = 1 kHz:
   TC4H = top >> 8;                      // top 2 bits...
   OCR4C = top;                          // and bottom 8 bits
   TC4H = 0;                             // 0% duty cycle: top 2 bits...
   OCR4D = 0;                            // and bottom 8 bits
 #else
   TCCR2A = 0x21;  // bits 7 and 6 clear: normal port op., OC4A disconnected
-                  // bit 5 set, 4 clear: clear OC2B on comp match when upcounting, 
+                  // bit 5 set, 4 clear: clear OC2B on comp match when upcounting,
                   //                     set OC2B on comp match when downcounting
                   // bits 3 and 2: not used
                   // bit 1 clear, 0 set: combine with bit 3 of TCCR2B...
-                  
+
   TCCR2B = 0x0B;  // bit 7 clear: no force output compare for channel A
                   // bit 6 clear: no force output compare for channel B
                   // bits 5 and 4: not used
@@ -176,7 +176,7 @@ void ZumoBuzzer::init2()
                   //    select waveform generation mode 5, phase-correct PWM,
                   //    TOP = OCR2A, OCR2B set at TOP, TOV2 flag set at BOTTOM
                   // bit 2 clear, 1-0 set: timer clock = clkT2S/32
-                  
+
   // This sets timer 2 to run in phase-correct PWM mode, where TOP = OCR2A,
   //    OCR2B is updated at TOP, TOV2 Flag is set on BOTTOM. OC2B is cleared
   //    on compare match when upcounting, set on compare match when downcounting;
@@ -184,12 +184,12 @@ void ZumoBuzzer::init2()
   // Note: if the PWM frequency and duty cycle are changed, the first
   //    cycle of the new frequency will be at the old duty cycle, since
   //    the duty cycle (OCR2B) is not updated until TOP.
-  
+
 
   OCR2A = (F_CPU/64) / 1000;  // set TOP for freq = 1 kHz
   OCR2B = 0;                  // 0% duty cycle
 #endif
-  
+
   BUZZER_DDR |= BUZZER;    // buzzer pin set as an output
   sei();
 }
@@ -203,15 +203,15 @@ void ZumoBuzzer::init2()
 //   greater than 1 kHz.  For example, the max duration you can use for a
 //   frequency of 10 kHz is 6553 ms.  If you use a duration longer than this,
 //   you will cause an integer overflow that produces unexpected behavior.
-void ZumoBuzzer::playFrequency(unsigned int freq, unsigned int dur, 
+void ZumoBuzzer::playFrequency(unsigned int freq, unsigned int dur,
                      unsigned char volume)
 {
   init(); // initializes the buzzer if necessary
   buzzerFinished = 0;
-  
+
   unsigned int timeout;
   unsigned char multiplier = 1;
-  
+
   if (freq & DIV_BY_10) // if frequency's DIV_BY_10 bit is set
   {                     //  then the true frequency is freq/10
     multiplier = 10;    //  (gives higher resolution for small freqs)
@@ -220,30 +220,30 @@ void ZumoBuzzer::playFrequency(unsigned int freq, unsigned int dur,
 
   unsigned char min = 40 * multiplier;
   if (freq < min) // min frequency allowed is 40 Hz
-    freq = min;  
+    freq = min;
   if (multiplier == 1 && freq > 10000)
     freq = 10000;      // max frequency allowed is 10kHz
 
 #ifdef __AVR_ATmega32U4__
   unsigned long top;
   unsigned char dividerExponent = 0;
-  
+
   // calculate necessary clock source and counter top value to get freq
   top = (unsigned int)(((F_CPU/2 * multiplier) + (freq >> 1))/ freq);
-  
+
   while (top > 1023)
   {
     dividerExponent++;
     top = (unsigned int)((((F_CPU/2 >> (dividerExponent)) * multiplier) + (freq >> 1))/ freq);
   }
-#else   
+#else
   unsigned int top;
   unsigned char newCS2 = 2; // try prescaler divider of 8 first (minimum necessary for 10 kHz)
   unsigned int divider = cs2_divider[newCS2];
 
   // calculate necessary clock source and counter top value to get freq
   top = (unsigned int)(((F_CPU/16 * multiplier) + (freq >> 1))/ freq);
-  
+
   while (top > 255)
   {
     divider = cs2_divider[++newCS2];
@@ -259,12 +259,12 @@ void ZumoBuzzer::playFrequency(unsigned int freq, unsigned int dur,
     timeout = dur;  // duration for silent notes is exact
   else
     timeout = (unsigned int)((long)dur * freq / 1000);
-  
+
   if (volume > 15)
     volume = 15;
 
-  DISABLE_TIMER_INTERRUPT();      // disable interrupts while writing to registers 
-  
+  DISABLE_TIMER_INTERRUPT();      // disable interrupts while writing to registers
+
 #ifdef __AVR_ATmega32U4__
   TCCR4B = (TCCR4B & 0xF0) | (dividerExponent + 1); // select timer 4 clock prescaler: divider = 2^n if CS4 = n+1
   TC4H = top >> 8;                                  // set timer 1 pwm frequency: top 2 bits...
@@ -273,18 +273,18 @@ void ZumoBuzzer::playFrequency(unsigned int freq, unsigned int dur,
   TC4H = width >> 8;                                // top 2 bits...
   OCR4D = width;                                    // and bottom 8 bits
   buzzerTimeout = timeout;                          // set buzzer duration
-  
-  TIFR4 |= 0xFF;  // clear any pending t4 overflow int.      
+
+  TIFR4 |= 0xFF;  // clear any pending t4 overflow int.
 #else
   TCCR2B = (TCCR2B & 0xF8) | newCS2;  // select timer 2 clock prescaler
   OCR2A = top;                        // set timer 2 pwm frequency
   OCR2B = top >> (16 - volume);       // set duty cycle (volume)
   buzzerTimeout = timeout;            // set buzzer duration
 
-  TIFR2 |= 0xFF;  // clear any pending t2 overflow int.     
+  TIFR2 |= 0xFF;  // clear any pending t2 overflow int.
 #endif
 
-  ENABLE_TIMER_INTERRUPT();  
+  ENABLE_TIMER_INTERRUPT();
 }
 
 
@@ -410,12 +410,12 @@ unsigned char ZumoBuzzer::isPlaying()
 }
 
 
-// Plays the specified sequence of notes.  If the play mode is 
+// Plays the specified sequence of notes.  If the play mode is
 // PLAY_AUTOMATIC, the sequence of notes will play with no further
 // action required by the user.  If the play mode is PLAY_CHECK,
 // the user will need to call playCheck() in the main loop to initiate
 // the playing of each new note in the sequence.  The play mode can
-// be changed while the sequence is playing.  
+// be changed while the sequence is playing.
 // This is modeled after the PLAY commands in GW-BASIC, with just a
 // few differences.
 //
@@ -490,15 +490,15 @@ void ZumoBuzzer::playFromProgramSpace(const char *notes_p)
 void ZumoBuzzer::stopPlaying()
 {
   DISABLE_TIMER_INTERRUPT();          // disable interrupts
- 
+
 #ifdef __AVR_ATmega32U4__
   TCCR4B = (TCCR4B & 0xF0) | TIMER4_CLK_8;  // select IO clock
-  unsigned int top = (F_CPU/16) / 1000;     // set TOP for freq = 1 kHz: 
+  unsigned int top = (F_CPU/16) / 1000;     // set TOP for freq = 1 kHz:
   TC4H = top >> 8;                          // top 2 bits... (TC4H temporarily stores top 2 bits of 10-bit accesses)
   OCR4C = top;                              // and bottom 8 bits
   TC4H = 0;                                 // 0% duty cycle: top 2 bits...
   OCR4D = 0;                                // and bottom 8 bits
-#else 
+#else
   TCCR2B = (TCCR2B & 0xF8) | TIMER2_CLK_32; // select IO clock
   OCR2A = (F_CPU/64) / 1000;                // set TOP for freq = 1 kHz
   OCR2B = 0;                                // 0% duty cycle
@@ -693,7 +693,7 @@ static void nextNote()
     staccato_rest_duration = tmp_duration / 2;
     tmp_duration -= staccato_rest_duration;
   }
-  
+
   // this will re-enable the timer1 overflow interrupt
   ZumoBuzzer::playNote(rest ? SILENT_NOTE : note, tmp_duration, volume);
 }
@@ -726,7 +726,7 @@ void ZumoBuzzer::playMode(unsigned char mode)
 
 // Checks whether it is time to start another note, and starts
 // it if so.  If it is not yet time to start the next note, this method
-// returns without doing anything.  Call this as often as possible 
+// returns without doing anything.  Call this as often as possible
 // in your main loop to avoid delays between notes in the sequence.
 //
 // Returns true if it is still playing.

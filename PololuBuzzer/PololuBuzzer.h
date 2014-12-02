@@ -93,10 +93,10 @@ class ZumoBuzzer
    * play a frequency of 44.5 Hz by using a \a frequency of `(DIV_BY_10 | 445)`.
    * If the most significant bit of \a frequency is not set, the units for
    * frequency are Hz. The \a volume argument controls the buzzer volume, with
-   * 15 being the loudest and 0 being the quietest. A \a volume of 15 supplies 
+   * 15 being the loudest and 0 being the quietest. A \a volume of 15 supplies
    * the buzzer with a 50% duty cycle PWM at the specified \a frequency.
    * Lowering \a volume by one halves the duty cycle (so 14 gives a 25% duty
-   * cycle, 13 gives a 12.5% duty cycle, etc). The volume control is somewhat 
+   * cycle, 13 gives a 12.5% duty cycle, etc). The volume control is somewhat
    * crude (especially on the ATmega328/168) and should be thought of as a bonus
    * feature.
    *
@@ -143,10 +143,10 @@ class ZumoBuzzer
    *
    * The \a note argument is an enumeration for the notes of the equal tempered
    * scale (ETS). See \ref note_macros "Note Macros" for more information. The
-   * \a volume argument controls the buzzer volume, with 15 being the loudest 
-   * and 0 being the quietest. A \a volume of 15 supplies the buzzer with a 50% 
-   * duty cycle PWM at the specified \a frequency. Lowering \a volume by one 
-   * halves the duty cycle (so 14 gives a 25% duty cycle, 13 gives a 12.5% duty 
+   * \a volume argument controls the buzzer volume, with 15 being the loudest
+   * and 0 being the quietest. A \a volume of 15 supplies the buzzer with a 50%
+   * duty cycle PWM at the specified \a frequency. Lowering \a volume by one
+   * halves the duty cycle (so 14 gives a 25% duty cycle, 13 gives a 12.5% duty
    * cycle, etc). The volume control is somewhat crude (especially on the
    * ATmega328/168) and should be thought of as a bonus feature.
    *
