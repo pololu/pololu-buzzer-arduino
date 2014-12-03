@@ -1,15 +1,18 @@
-/*! \file ZumoBuzzer.h
+// Copyright (C) Pololu Corporation.  See LICENSE.txt for more details.
+
+/*! \file PololuBuzzer.h
  *
- * See the ZumoBuzzer class reference for more information about this library.
+ * See the PololuBuzzer class reference for more information about this library.
  *
- * \class ZumoBuzzer ZumoBuzzer.h
+ * \class PololuBuzzer PololuBuzzer.h
  * \brief Play beeps and music with buzzer
  *
- * The ZumoBuzzer library allows various sounds to be played through the buzzer
- * on the Zumo Shield, from simple beeps to complex tunes. The buzzer is
- * controlled using a PWM output of Timer 2 (on the Arduino Uno and other
- * ATmega328/168 boards) or Timer 4 (on the Arduino Leonardo and other
- * ATmega32U4 boards), so it will conflict with any other uses of that timer.
+ * The PololuBuzzer library allows various sounds to be played through a buzzer,
+ * from simple beeps to complex tunes.
+ *
+ * On the ATmega328P/168 boards, this library uses Timer 2 and pin 3 (PD3/OC2B).
+ * On ATmega32U4 boards, this library uses Timer 4 and pin 6 (PD7/OC4D).  This
+ * library will conflict will other libraries that use the same timer or pin.
  *
  * Note durations are timed using a timer overflow interrupt
  * (`TIMER2_OVF`/`TIMER4_OVF`), which will briefly interrupt execution of your
@@ -20,14 +23,14 @@
  * (perhaps several hundred microseconds) every time it starts a new note. It is
  * important to take this into account when writing timing-critical code.
  *
- * The ZumoBuzzer library is fully compatible with the OrangutanBuzzer functions
- * in the [Pololu AVR C/C++ Library](http://www.pololu.com/docs/0J18), so any
- * sequences and melodies written for OrangutanBuzzer functions will also work
- * with the equivalent ZumoBuzzer functions.
+ * This library is fully compatible with the OrangutanBuzzer functions
+ * in the [Pololu AVR C/C++ Library](http://www.pololu.com/docs/0J18)
+ * and the [ZumoBuzzer library](https://github.com/pololu/zumo-shield),
+ * so any sequences and melodies written for those libraries will also work
+ * with the equivalent PololuBuzzer functions.
  */
 
-#ifndef ZumoBuzzer_h
-#define ZumoBuzzer_h
+#pragma once
 
 #define PLAY_AUTOMATIC 0
 #define PLAY_CHECK     1
@@ -73,12 +76,12 @@
 #define DIV_BY_10     (1 << 15)
 /*! @} */
 
-class ZumoBuzzer
+class PololuBuzzer
 {
   public:
 
     // constructor
-  ZumoBuzzer();
+  PololuBuzzer();
 
   /*! \brief Plays the specified frequency for the specified duration.
    *
@@ -111,7 +114,7 @@ class ZumoBuzzer
    * ### Example ###
    *
    * ~~~{.ino}
-   * ZumoBuzzer buzzer;
+   * PololuBuzzer buzzer;
    *
    * ...
    *
@@ -239,7 +242,7 @@ class ZumoBuzzer
    * ### Example ###
    *
    * ~~~{.ino}
-   * ZumoBuzzer buzzer;
+   * PololuBuzzer buzzer;
    *
    * ...
    *
@@ -267,7 +270,7 @@ class ZumoBuzzer
    * ~~~{.ino}
    * #include <avr/pgmspace.h>
    *
-   * ZumoBuzzer buzzer;
+   * PololuBuzzer buzzer;
    * const char melody[] PROGMEM = "!L16 V8 cdefgab>cbagfedc";
    *
    * ...
@@ -341,5 +344,3 @@ class ZumoBuzzer
   static void init2();
   static void init();
 };
-
-#endif
