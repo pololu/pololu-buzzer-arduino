@@ -1,25 +1,24 @@
-#include <ZumoBuzzer.h>
-#include <Pushbutton.h>
+/* This example uses the PololuBuzzer library to play a
+series of notes on the buzzer.
 
-/*
- * This example uses the ZumoBuzzer library to play a series of notes on
- * the buzzer.  It uses the Pushbutton library to allow the user to
- * select which melody plays.
- *
- * This example demonstrates the use of the ZumoBuzzer::play() method,
- * which plays the specified melody entirely in the background, requiring
- * no further action from the user once the method is called.  The CPU
- * is then free to execute other code while the melody plays.
- */
+This example demonstrates the use of the playFrequency(),
+playNote(), and playFromProgramSpace() functions, which play
+entirely in the background, requiring no further action from the
+user once the function is called.  The CPU is then free to
+execute other code while the buzzer plays.
 
-ZumoBuzzer buzzer;
-Pushbutton button(ZUMO_BUTTON);
+This example also shows how to use the stopPlaying() function to
+stop the buzzer, and it shows how to use the isPlaying() function
+to tell whether the buzzer is still playing or not. */
 
-#include <avr/pgmspace.h>  // this lets us refer to data in program space (i.e. flash)
-// store this fugue in program space using the PROGMEM macro.  
-// Later we will play it directly from program space, bypassing the need to load it 
-// all into RAM first.
-const char fugue[] PROGMEM = 
+#include <PololuBuzzer.h>
+
+PololuBuzzer buzzer;
+
+// Store this song in program space using the PROGMEM macro.
+// Later we will play it directly from program space, bypassing
+// the need to load it all into RAM first.
+const char fugue[] PROGMEM =
   "! O5 L16 agafaea dac+adaea fa<aa<bac#a dac#adaea f"
   "O6 dcd<b-d<ad<g d<f+d<gd<ad<b- d<dd<ed<f+d<g d<f+d<gd<ad"
   "L8 MS <b-d<b-d MLe-<ge-<g MSc<ac<a ML d<fd<f O5 MS b-gb-g"
@@ -30,39 +29,34 @@ const char fugue[] PROGMEM =
   "O5 e>ee>ef>df>d b->c#b->c#a>df>d e>ee>ef>df>d"
   "e>d>c#>db>d>c#b >c#agaegfe f O6 dc#dfdc#<b c#4";
 
-void setup()                    // run once, when the sketch starts
+void setup()       // run once, when the sketch starts
 {
 }
 
-void loop()                     // run over and over again
+void loop()        // run over and over again
 {
-  static unsigned char mode = 0;
-  
-  // wait here for the button to be pushed
-  button.waitForButton();
-  
-  // perform an action depending on the current mode
-  switch (mode)
-  {      
-    case 0:
-      // play fugue from flash (program space)
-      buzzer.playFromProgramSpace(fugue);
-      break;
+  // Start playing a tone with frequency 440 Hz at maximum
+  // volume (15) for 200 milliseconds.
+  buzzer.playFrequency(440, 200, 15);
 
-    case 1:
-      // play scale from RAM
-      buzzer.play("! V10 cdefgab>cbagfedc");
-      break;
-      
-    case 2:
-      // stop any currently playing melody
-      buzzer.stopPlaying();
-      // play note A5
-      buzzer.playNote(NOTE_A(5), 200, 15);
-      break;
-  }
-  
-  // increment mode and wrap around
-  if (++mode > 2)
-    mode = 0;
+  // Delay to give the tone time to finish.
+  delay(1000);
+
+  // Start playing note A in octave 4 at maximum volume
+  // volume (15) for 2000 milliseconds.
+  buzzer.playNote(NOTE_A(4), 2000, 15);
+
+  // Wait for 200 ms and stop playing note.
+  delay(200);
+  buzzer.stopPlaying();
+
+  delay(1000);
+
+  // Start playing a fugue from program space.
+  buzzer.playFromProgramSpace(fugue);
+
+  // Wait until it is done playing.
+  while(buzzer.isPlaying()){ }
+
+  delay(1000);
 }
