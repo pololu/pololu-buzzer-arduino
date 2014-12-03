@@ -1,6 +1,6 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
-#include "ZumoBuzzer.h"
+#include "PololuBuzzer.h"
 
 #ifdef __AVR_ATmega32U4__
 
@@ -101,7 +101,7 @@ ISR (TIMER2_OVF_vect)
 #endif
 
 // this is called by playFrequency()
-inline void ZumoBuzzer::init()
+inline void PololuBuzzer::init()
 {
   if (!buzzerInitialized)
   {
@@ -111,7 +111,7 @@ inline void ZumoBuzzer::init()
 }
 
 // initializes timer4 (32U4) or timer2 (328P) for buzzer control
-void ZumoBuzzer::init2()
+void PololuBuzzer::init2()
 {
   DISABLE_TIMER_INTERRUPT();
 
@@ -196,7 +196,7 @@ void ZumoBuzzer::init2()
 //   greater than 1 kHz.  For example, the max duration you can use for a
 //   frequency of 10 kHz is 6553 ms.  If you use a duration longer than this,
 //   you will cause an integer overflow that produces unexpected behavior.
-void ZumoBuzzer::playFrequency(unsigned int freq, unsigned int dur,
+void PololuBuzzer::playFrequency(unsigned int freq, unsigned int dur,
                      unsigned char volume)
 {
   init(); // initializes the buzzer if necessary
@@ -291,7 +291,7 @@ void ZumoBuzzer::playFrequency(unsigned int freq, unsigned int dur,
 //  greater than 1 kHz.  For example, the max duration you can use for a
 //  frequency of 10 kHz is 6553 ms.  If you use a duration longer than this,
 //  you will cause an integer overflow that produces unexpected behavior.
-void ZumoBuzzer::playNote(unsigned char note, unsigned int dur,
+void PololuBuzzer::playNote(unsigned char note, unsigned int dur,
                  unsigned char volume)
 {
   // note = key + octave * 12, where 0 <= key < 12
@@ -397,7 +397,7 @@ void ZumoBuzzer::playNote(unsigned char note, unsigned int dur,
 
 
 // Returns 1 if the buzzer is currently playing, otherwise it returns 0
-unsigned char ZumoBuzzer::isPlaying()
+unsigned char PololuBuzzer::isPlaying()
 {
   return !buzzerFinished || buzzerSequence != 0;
 }
@@ -460,7 +460,7 @@ unsigned char ZumoBuzzer::isPlaying()
 //
 // Here is an example from Bach:
 //   play("T240 L8 a gafaeada c+adaeafa <aa<bac#ada c#adaeaf4");
-void ZumoBuzzer::play(const char *notes)
+void PololuBuzzer::play(const char *notes)
 {
   DISABLE_TIMER_INTERRUPT();  // prevent this from being interrupted
   buzzerSequence = notes;
@@ -469,7 +469,7 @@ void ZumoBuzzer::play(const char *notes)
   nextNote();          // this re-enables the timer1 interrupt
 }
 
-void ZumoBuzzer::playFromProgramSpace(const char *notes_p)
+void PololuBuzzer::playFromProgramSpace(const char *notes_p)
 {
   DISABLE_TIMER_INTERRUPT();  // prevent this from being interrupted
   buzzerSequence = notes_p;
@@ -480,7 +480,7 @@ void ZumoBuzzer::playFromProgramSpace(const char *notes_p)
 
 
 // stop all sound playback immediately
-void ZumoBuzzer::stopPlaying()
+void PololuBuzzer::stopPlaying()
 {
   DISABLE_TIMER_INTERRUPT();          // disable interrupts
 
@@ -553,7 +553,7 @@ static void nextNote()
   // if we are playing staccato, after every note we play a rest
   if(staccato && staccato_rest_duration)
   {
-    ZumoBuzzer::playNote(SILENT_NOTE, staccato_rest_duration, 0);
+    PololuBuzzer::playNote(SILENT_NOTE, staccato_rest_duration, 0);
     staccato_rest_duration = 0;
     return;
   }
@@ -688,7 +688,7 @@ static void nextNote()
   }
 
   // this will re-enable the timer1 overflow interrupt
-  ZumoBuzzer::playNote(rest ? SILENT_NOTE : note, tmp_duration, volume);
+  PololuBuzzer::playNote(rest ? SILENT_NOTE : note, tmp_duration, volume);
 }
 
 
@@ -706,7 +706,7 @@ static void nextNote()
 // Usage: playMode(PLAY_AUTOMATIC) makes it automatic (the
 // default), playMode(PLAY_CHECK) sets it to a mode where you have
 // to call playCheck().
-void ZumoBuzzer::playMode(unsigned char mode)
+void PololuBuzzer::playMode(unsigned char mode)
 {
   play_mode_setting = mode;
 
@@ -723,7 +723,7 @@ void ZumoBuzzer::playMode(unsigned char mode)
 // in your main loop to avoid delays between notes in the sequence.
 //
 // Returns true if it is still playing.
-unsigned char ZumoBuzzer::playCheck()
+unsigned char PololuBuzzer::playCheck()
 {
   if(buzzerFinished && buzzerSequence != 0)
     nextNote();
