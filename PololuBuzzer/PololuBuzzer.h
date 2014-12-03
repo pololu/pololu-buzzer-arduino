@@ -4,6 +4,10 @@
  *
  * See the PololuBuzzer class reference for more information about this library.
  *
+ * The main repository for this library is
+ * https://github.com/pololu/pololu-buzzer-arduino, though copies of this
+ * library also exist in other repositories.
+ *
  * \class PololuBuzzer PololuBuzzer.h
  * \brief Play beeps and music with buzzer
  *
@@ -27,8 +31,7 @@
  * in the [Pololu AVR C/C++ Library](http://www.pololu.com/docs/0J18)
  * and the [ZumoBuzzer library](https://github.com/pololu/zumo-shield),
  * so any sequences and melodies written for those libraries will also work
- * with the equivalent PololuBuzzer functions.
- */
+ * with the equivalent PololuBuzzer functions. */
 
 #pragma once
 
