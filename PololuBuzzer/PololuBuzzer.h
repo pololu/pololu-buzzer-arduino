@@ -9,7 +9,7 @@
  * library also exist in other repositories.
  *
  * \class PololuBuzzer PololuBuzzer.h
- * \brief Play beeps and music with buzzer
+ * \brief Play beeps and music with the buzzer.
  *
  * The PololuBuzzer library allows various sounds to be played through a buzzer,
  * from simple beeps to complex tunes.
@@ -37,7 +37,12 @@
 
 #include <avr/pgmspace.h>
 
+/*! Specifies that the sequence of notes will play with no further action
+ *  required by the user. */
 #define PLAY_AUTOMATIC 0
+
+
+/*! Specified that the user will need to call `playCheck()` regularly. */
 #define PLAY_CHECK     1
 
 //                                             n
@@ -131,11 +136,11 @@ class PololuBuzzer
    * ~~~
    *
    * \warning \a frequency &times; \a duration / 1000 must be no greater than
-     0xFFFF (65535). This means you can't use a max duration of 65535 ms for
-     frequencies greater than 1 kHz. For example, the maximum duration you can
-     use for a frequency of 10 kHz is 6553 ms. If you use a duration longer than
-     this, you will produce an integer overflow that can result in unexpected
-     behavior.
+   * 0xFFFF (65535). This means you can't use a max duration of 65535 ms for
+   * frequencies greater than 1 kHz. For example, the maximum duration you can
+   * use for a frequency of 10 kHz is 6553 ms. If you use a duration longer than
+   * this, you will produce an integer overflow that can result in unexpected
+   * behavior.
    */
   static void playFrequency(unsigned int freq, unsigned int duration,
                 unsigned char volume);
@@ -280,7 +285,7 @@ class PololuBuzzer
    * buzzer.playFromProgramSpace(melody);
    * ~~~
    */
-  static void playFromProgramSpace(const char *sequence_p);
+  static void playFromProgramSpace(const char *sequence);
 
   /*! \brief Controls whether `play()` sequence is played automatically or
    *         must be driven with `playCheck()`.

@@ -6,7 +6,7 @@ Release date: 2014 Dec 05<br/>
 
 ## Summary
 
-This is a C++ library for the Arduino IDE that allows you to play notes and songs on a buzzer.  This library was made in order to support programmable boards from Pololu that feature a buzzer, so it currently does not offer any flexibility to choose where the buzzer is connected.  For boards based on the ATmega328P, this library uses Timer 2 and pin 3 (PD3/OC2B).  For boards based on the ATmega32U4, this library uses Timer 4 and pin 6 (PD7/OC4D).  This library will conflict will other libraries that use the same timer or pin.
+This is a C++ library for the Arduino IDE that allows you to play notes and songs on a buzzer.  This library was made in order to support programmable boards from Pololu that feature a buzzer, so it does not offer any choice for where the buzzer is connected.  For boards based on the ATmega328P, this library uses Timer 2 and pin 3 (PD3/OC2B).  For boards based on the ATmega32U4, this library uses Timer 4 and pin 6 (PD7/OC4D).  This library will conflict will other libraries that use the same timer or pin.
 
 This library is not meant to be installed on its own.  The files from this library are included in other libraries specific to the board you are programming, such as the AStar32U4Prime library.
 
