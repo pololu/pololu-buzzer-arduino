@@ -1,5 +1,4 @@
 #include <avr/interrupt.h>
-#include <avr/pgmspace.h>
 #include "PololuBuzzer.h"
 
 #ifdef __AVR_ATmega32U4__

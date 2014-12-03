@@ -32,6 +32,8 @@
 
 #pragma once
 
+#include <avr/pgmspace.h>
+
 #define PLAY_AUTOMATIC 0
 #define PLAY_CHECK     1
 
