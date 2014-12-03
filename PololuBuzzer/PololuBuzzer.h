@@ -80,9 +80,6 @@ class PololuBuzzer
 {
   public:
 
-    // constructor
-  PololuBuzzer();
-
   /*! \brief Plays the specified frequency for the specified duration.
    *
    * \param freq     Frequency to play in Hz (or 0.1 Hz if the `DIV_BY_10` bit

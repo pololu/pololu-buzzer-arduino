@@ -100,13 +100,6 @@ ISR (TIMER2_OVF_vect)
 
 #endif
 
-
-// constructor
-
-ZumoBuzzer::ZumoBuzzer()
-{
-}
-
 // this is called by playFrequency()
 inline void ZumoBuzzer::init()
 {
