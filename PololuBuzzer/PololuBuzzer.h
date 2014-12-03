@@ -37,12 +37,12 @@
 
 #include <avr/pgmspace.h>
 
-/*! Specifies that the sequence of notes will play with no further action
+/*! \brief Specifies that the sequence of notes will play with no further action
  *  required by the user. */
 #define PLAY_AUTOMATIC 0
 
 
-/*! Specified that the user will need to call `playCheck()` regularly. */
+/*! \brief Specified that the user will need to call `playCheck()` regularly. */
 #define PLAY_CHECK     1
 
 //                                             n
@@ -120,7 +120,7 @@ class PololuBuzzer
    *
    * ### Example ###
    *
-   * ~~~{.ino}
+   * ~~~{.cpp}
    * PololuBuzzer buzzer;
    *
    * ...
@@ -136,7 +136,7 @@ class PololuBuzzer
    * ~~~
    *
    * \warning \a frequency &times; \a duration / 1000 must be no greater than
-   * 0xFFFF (65535). This means you can't use a max duration of 65535 ms for
+   * 0xFFFF (65535). This means you can't use a duration of 65535 ms for
    * frequencies greater than 1 kHz. For example, the maximum duration you can
    * use for a frequency of 10 kHz is 6553 ms. If you use a duration longer than
    * this, you will produce an integer overflow that can result in unexpected
@@ -248,7 +248,7 @@ class PololuBuzzer
    *
    * ### Example ###
    *
-   * ~~~{.ino}
+   * ~~~{.cpp}
    * PololuBuzzer buzzer;
    *
    * ...
@@ -274,7 +274,7 @@ class PololuBuzzer
    *
    * ### Example ###
    *
-   * ~~~{.ino}
+   * ~~~{.cpp}
    * #include <avr/pgmspace.h>
    *
    * PololuBuzzer buzzer;
@@ -294,14 +294,14 @@ class PololuBuzzer
    *
    * This method lets you determine whether the notes of the `play()` sequence
    * are played automatically in the background or are driven by the
-   * `play_check()` method. If \a mode is `PLAY_AUTOMATIC`, the sequence will
+   * `playCheck()` method. If \a mode is `PLAY_AUTOMATIC`, the sequence will
    * play automatically in the background, driven by the timer overflow
    * interrupt. The interrupt will take a considerable amount of time to execute
    * when it starts the next note in the sequence playing, so it is recommended
    * that you do not use automatic-play if you cannot tolerate being interrupted
    * for more than a few microseconds. If \a mode is `PLAY_CHECK`, you can
    * control when the next note in the sequence is played by calling the
-   * `play_check()` method at acceptable points in your main loop. If your main
+   * `playCheck()` method at acceptable points in your main loop. If your main
    * loop has substantial delays, it is recommended that you use automatic-play
    * mode rather than play-check mode. Note that the play mode can be changed
    * while the sequence is being played. The mode is set to `PLAY_AUTOMATIC` by
