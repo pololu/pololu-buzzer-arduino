@@ -1,7 +1,7 @@
 # PololuBuzzer library for Arduino
 
 Version: 1.0.0<br/>
-Release date: 2014 Dec 05<br/>
+Release date: 2014 Dec 09<br/>
 [www.pololu.com](http://www.pololu.com/)
 
 ## Summary
@@ -12,4 +12,4 @@ This library is not meant to be installed on its own.  The files from this libra
 
 ## Version history
 
-* 1.0.0 (2014 Dec 05): Original release.
+* 1.0.0 (2014 Dec 09): Original release.
