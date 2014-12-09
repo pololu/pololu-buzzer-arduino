@@ -1,16 +1,4 @@
-#######################################
-# Syntax Coloring Map ZumoBuzzer
-#######################################
-
-#######################################
-# Datatypes (KEYWORD1)
-#######################################
-
 PololuBuzzer	KEYWORD1
-
-#######################################
-# Methods and Functions (KEYWORD2)
-#######################################
 
 playFrequency	KEYWORD2
 playNote	KEYWORD2
@@ -20,10 +8,6 @@ isPlaying	KEYWORD2
 stopPlaying	KEYWORD2
 playMode	KEYWORD2
 playCheck	KEYWORD2
-
-#######################################
-# Constants (LITERAL1)
-#######################################
 
 PLAY_AUTOMATIC	LITERAL1
 PLAY_CHECK	LITERAL1
