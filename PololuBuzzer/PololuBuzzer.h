@@ -86,9 +86,64 @@
 #define DIV_BY_10     (1 << 15)
 /*! @} */
 
+
 class PololuBuzzer
 {
+    typedef void PlayFrequency(unsigned int freq, unsigned int dur,
+                                       unsigned char volume);
+
+ private:
+    static PlayFrequency *playFrequency; // wmacevoy
   public:
+
+  /*! \brief Change default playFrequency callback.
+   * 
+   * ### Example ###
+   *
+   * ~~~{.cpp}
+   * #include <PololuBuzzer.h>
+   *
+   * PololuBuzzer buzzer;
+   *
+   * unsigned long speed=0;
+   * const int speedPin=0;
+   * const int ledPin=3;
+   *
+   * void myPlayFrequency(unsigned int freq,unsigned int dur, 
+   *                      unsigned char volume)
+   * {
+   *   unsigned int adjFreq = freq*speed/1023UL;
+   *   unsigned int adjDur  = dur*1023UL/speed;
+
+   *   // set led brightness according to adjFreq
+   *   unsigned int pwm = adjFreq*255UL/10000UL;
+   *   if (pwm > 255) pwm=255;
+   *   analogWrite(ledPin,pwm);
+   *
+   *   // play speed-adjusted note
+   *   buzzer.defaultPlayFrequency(adjFreq,adjDur,volume);
+   * }
+   *
+   * void setup()
+   * {
+   *   buzzer.setPlayFrequency(myPlayFrequency);
+   *   pinMode(ledPin,OUTPUT);
+   * }
+   * 
+   * const char melody[] PROGMEM = "!L16 V8 cdefgab>cbagfedc";
+   *
+   * void loop()
+   * {
+   *   speed=4*analogRead(speedPin); // up to 4x speed
+   *   if (!buzzer.isPlaying()) 
+   *   {
+   *     delay(1000);
+   *     buzzer.playFromProgramSpace(melody);
+   *   }
+   * }
+   *
+   */
+    static void setPlayFrequency(PlayFrequency *value);
 
   /*! \brief Plays the specified frequency for the specified duration.
    *
@@ -142,7 +197,7 @@ class PololuBuzzer
    * this, you will produce an integer overflow that can result in unexpected
    * behavior.
    */
-  static void playFrequency(unsigned int freq, unsigned int duration,
+  static void defaultPlayFrequency(unsigned int freq, unsigned int duration,
                 unsigned char volume);
 
   /*! \brief Plays the specified note for the specified duration.
