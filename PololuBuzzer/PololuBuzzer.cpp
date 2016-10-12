@@ -31,7 +31,7 @@ static const unsigned int cs2_divider[] = {0, 1, 8, 32, 64, 128, 256, 1024};
 
 unsigned char buzzerInitialized = 0;
 volatile unsigned char buzzerFinished = 1;  // flag: 0 while playing
-const char *buzzerSequence = 0;
+const char * volatile buzzerSequence = 0;
 
 // declaring these globals as static means they won't conflict
 // with globals in other .cpp files that share the same name
@@ -39,7 +39,7 @@ static volatile unsigned int buzzerTimeout = 0;    // tracks buzzer time limit
 static char play_mode_setting = PLAY_AUTOMATIC;
 
 extern volatile unsigned char buzzerFinished;  // flag: 0 while playing
-extern const char *buzzerSequence;
+extern const char * volatile buzzerSequence;
 
 
 static unsigned char use_program_space; // boolean: true if we should
