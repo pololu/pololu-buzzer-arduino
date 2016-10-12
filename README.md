@@ -12,5 +12,5 @@ This library is not meant to be installed on its own.  The files from this libra
 
 ## Version history
 
-* 1.0.1 (2016-10-12): Fixed a bug that caused the `isPlaying` method to malfunction sometimes when link-time optimization is enabled.
+* 1.0.1 (2016-10-12): Fixed a bug that caused the `isPlaying` method to malfunction sometimes when link time optimization is enabled.
 * 1.0.0 (2014-12-11): Original release.
