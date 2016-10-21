@@ -29,6 +29,14 @@ static const unsigned int cs2_divider[] = {0, 1, 8, 32, 64, 128, 256, 1024};
 
 #endif
 
+PololuBuzzer::PlayFrequency
+*PololuBuzzer::playFrequency=&PololuBuzzer::defaultPlayFrequency;
+
+void PololuBuzzer::setPlayFrequency(PlayFrequency *value)
+{
+  playFrequency=value;
+}
+
 unsigned char buzzerInitialized = 0;
 volatile unsigned char buzzerFinished = 1;  // flag: 0 while playing
 const char * volatile buzzerSequence = 0;
@@ -196,7 +204,7 @@ void PololuBuzzer::init2()
 //   greater than 1 kHz.  For example, the max duration you can use for a
 //   frequency of 10 kHz is 6553 ms.  If you use a duration longer than this,
 //   you will cause an integer overflow that produces unexpected behavior.
-void PololuBuzzer::playFrequency(unsigned int freq, unsigned int dur,
+void PololuBuzzer::defaultPlayFrequency(unsigned int freq, unsigned int dur,
                      unsigned char volume)
 {
   init(); // initializes the buzzer if necessary
