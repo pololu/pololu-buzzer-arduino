@@ -156,7 +156,7 @@ void PololuBuzzer::init2()
   TC4H = 0;                             // 0% duty cycle: top 2 bits...
   OCR4D = 0;                            // and bottom 8 bits
 #else
-  TCCR2A = 0x21;  // bits 7 and 6 clear: normal port op., OC4A disconnected
+  TCCR2A = 0x21;  // bits 7 and 6 clear: normal port op., OC2A disconnected
                   // bit 5 set, 4 clear: clear OC2B on comp match when upcounting,
                   //                     set OC2B on comp match when downcounting
                   // bits 3 and 2: not used
