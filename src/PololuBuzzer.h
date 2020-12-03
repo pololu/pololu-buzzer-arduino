@@ -35,7 +35,7 @@
 
 #pragma once
 
-#include <avr/pgmspace.h>
+#include <Arduino.h>
 
 /*! \brief Specifies that the sequence of notes will play with no further action
  *  required by the user. */
@@ -262,6 +262,11 @@ class PololuBuzzer
    * ~~~
    */
   static void play(const char *sequence);
+
+  static void play(const __FlashStringHelper *sequence)
+  {
+    playFromProgramSpace((const char *)sequence);
+  }
 
   /*! \brief Plays the specified sequence of notes from program space.
    *
