@@ -1,9 +1,5 @@
 # PololuBuzzer library for Arduino
 
-Version: 1.1.0<br/>
-Release date: 2020-11-18<br/>
-[www.pololu.com](http://www.pololu.com/)
-
 ## Summary
 
 This is a C++ library for the Arduino IDE that allows you to make beeps and simple musical tunes on a speaker/buzzer connected to an output pin of the microcontroller.  Tone sequences are represented with a musical notation similar to the GW-BASIC PLAY command, and they play in the background, using interrupts.  To save RAM, songs can be read directly from program memory.
@@ -27,7 +23,7 @@ void setup()
 
 ## Version history
 
-* 1.2.0 (2020-13-03): Added support for `__FlashStringHelper` strings; moved code into `src/`; optimzed ATmega32U4 calculations; fixed minor bug that caused some frequencies to fail; CI testing.
+* 1.2.0 (2020-12-03): Added support for `__FlashStringHelper` strings; moved code into `src/`; optimzed ATmega32U4 calculations; fixed minor bug that caused some frequencies to fail; CI testing.
 * 1.1.0 (2020-11-18): Reorganized files to work with Arduino library manager.
 * 1.0.1 (2016-10-12): Fixed a bug that caused the `isPlaying` method to malfunction sometimes when link time optimization is enabled.
 * 1.0.0 (2014-12-11): Original release.
