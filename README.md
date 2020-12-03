@@ -27,6 +27,7 @@ void setup()
 
 ## Version history
 
+* 1.2.0 (2020-13-03): Added support for `__FlashStringHelper` strings; moved code into `src/`; optimzed ATmega32U4 calculations; fixed minor bug that caused some frequencies to fail; CI testing.
 * 1.1.0 (2020-11-18): Reorganized files to work with Arduino library manager.
 * 1.0.1 (2016-10-12): Fixed a bug that caused the `isPlaying` method to malfunction sometimes when link time optimization is enabled.
 * 1.0.0 (2014-12-11): Original release.
