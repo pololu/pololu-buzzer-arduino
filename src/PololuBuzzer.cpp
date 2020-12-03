@@ -156,7 +156,7 @@ void PololuBuzzer::init2()
   TC4H = 0;                             // 0% duty cycle: top 2 bits...
   OCR4D = 0;                            // and bottom 8 bits
 #else
-  TCCR2A = 0x21;  // bits 7 and 6 clear: normal port op., OC4A disconnected
+  TCCR2A = 0x21;  // bits 7 and 6 clear: normal port op., OC2A disconnected
                   // bit 5 set, 4 clear: clear OC2B on comp match when upcounting,
                   //                     set OC2B on comp match when downcounting
                   // bits 3 and 2: not used
@@ -218,31 +218,42 @@ void PololuBuzzer::playFrequency(unsigned int freq, unsigned int dur,
     freq = 10000;      // max frequency allowed is 10kHz
 
 #ifdef __AVR_ATmega32U4__
-  unsigned long top;
-  unsigned char dividerExponent = 0;
+  uint8_t dividerExponent = 0;
+  uint32_t dividedClk = F_CPU/2;
 
-  // calculate necessary clock source and counter top value to get freq
-  top = (unsigned int)(((F_CPU/2 * multiplier) + (freq >> 1))/ freq);
+  // The divided clock cannot be greater than or equal to 1024x the target
+  // frequency; otherwise, the timer's TOP value would overflow the max for a
+  // 10-bit number.
+  // Because the calculation for the TOP value will round to the nearest int,
+  // we use 1023.5 (which would round up to 1024) to calculate the smallest
+  // divided clock that would overflow.
+  uint32_t overflowClk = ((uint32_t)2047 * freq + multiplier) / 2 / multiplier;
 
-  while (top > 1023)
+  while (dividedClk >= overflowClk)
   {
     dividerExponent++;
-    top = (unsigned int)((((F_CPU/2 >> (dividerExponent)) * multiplier) + (freq >> 1))/ freq);
+    dividedClk >>= 1;
   }
 #else
-  unsigned int top;
-  unsigned char newCS2 = 2; // try prescaler divider of 8 first (minimum necessary for 10 kHz)
-  unsigned int divider = cs2_divider[newCS2];
+  uint8_t newCS2 = 2; // try prescaler divider of 8 first (minimum necessary for 10 kHz)
+  uint32_t dividedClk = F_CPU/2 / cs2_divider[newCS2];
 
-  // calculate necessary clock source and counter top value to get freq
-  top = (unsigned int)(((F_CPU/16 * multiplier) + (freq >> 1))/ freq);
+  // The divided clock cannot be greater than or equal to 256x the target
+  // frequency; otherwise, the timer's TOP value would overflow the max for an
+  // 8-bit number.
+  // Because the calculation for the TOP value will round to the nearest int,
+  // we use 255.5 (which would round up to 256) to calculate the smallest
+  // divided clock that would overflow.
+  uint32_t overflowClk = ((uint32_t)511 * freq + multiplier) / 2 / multiplier;
 
-  while (top > 255)
+  while (dividedClk >= overflowClk)
   {
-    divider = cs2_divider[++newCS2];
-    top = (unsigned int)(((F_CPU/2/divider * multiplier) + (freq >> 1))/ freq);
+    newCS2++;
+    dividedClk = F_CPU/2 / cs2_divider[newCS2];
   }
 #endif
+
+  uint16_t top = ((dividedClk * multiplier) + (freq >> 1)) / freq;
 
   // set timeout (duration):
   if (multiplier == 10)
