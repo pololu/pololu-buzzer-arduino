@@ -7,8 +7,5 @@ ci:
   stage: ci
   tags:
     - nix
-  variables:
-    ARDUINO_CI_ONLY_BOARDS: arduino:avr:leonardo,arduino:avr:uno
   script:
-    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/dev/arduino-ci.git ci
-    - ci/ci
+    - nix-shell -I nixpkgs=channel:nixpkgs-unstable -p arduino-ci --run "arduino-ci"
